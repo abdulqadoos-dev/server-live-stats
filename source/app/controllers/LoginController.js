@@ -55,9 +55,19 @@ const verifyOtp = async (req, res, next) => {
         const verify = await OptService.verifyOtp(user_id, otp)
         if(verify){
             await UserService.updateEmailVerified(user_id)
+            const token = jwt.sign(
+                { user_id: user_id},
+                process.env.APP_KEY,
+                {
+                    expiresIn: "3m",
+                }
+            );
             return res.status(200).send({
                 status: 'success',
-                message: 'OTP verified. Now you can login to continue to dashboard.'
+                message: 'OTP verified. Now you can login to continue to dashboard.',
+                data: {
+                    token
+                }
             })
         }else{
             return res.status(401).send({
@@ -73,6 +83,28 @@ const verifyOtp = async (req, res, next) => {
     }
 }
 
+const forgetPassword = async (req, res, next) => {
+    try{
+        return await UserService.forgetPassword(req, res);
+    }catch (err) {
+        return res.status(500).send({
+            status: 'error',
+            message: err.message
+        })
+    }
+}
+
+const resetPassword = async (req, res, next) => {
+    try{
+        return await UserService.resetPassword(req, res)
+    }catch (err) {
+        return res.status(500).send({
+            status: 'error',
+            message: err.message
+        })
+    }
+}
+
 module.exports = {
-    register, login, verifyOtp
+    register, login, verifyOtp, forgetPassword, resetPassword
 }

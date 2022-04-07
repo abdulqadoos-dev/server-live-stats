@@ -14,6 +14,8 @@ routes.get('/', (req, res, next)=>{
 routes.post('/signup', signupValidator, runSignupValidation, LoginController.register)
 routes.post('/login', loginValidator, runLoginValidation, LoginController.login)
 routes.post('/verify-otp', LoginController.verifyOtp)
+routes.post('/forget-password', LoginController.forgetPassword)
+routes.post('/reset-password', LoginController.resetPassword)
 /** ends */
 
 /** Users */
