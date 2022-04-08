@@ -4,18 +4,9 @@ const migration = require('./database/migration');
 const seeder = require('./database/seeder');
 const app = express();
 const morgan = require('morgan');
+const cors = require('cors');
 
-/** Logging */
-app.use(morgan('dev'));
-/** Parse the request */
-app.use(express.urlencoded({ extended: false }));
-/** Takes care of JSON data */
-app.use(express.json());
-
-/** Init routes */
-app.use('/',apiRoutes)
-app.get('/migrate',migration.runMigration)
-app.get('/seeder',seeder.runSeeder)
+app.use(cors())
 
 /** RULES OF OUR API */
 app.use((req, res, next) => {
@@ -30,6 +21,18 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+/** Logging */
+app.use(morgan('dev'));
+/** Parse the request */
+app.use(express.urlencoded({ extended: false }));
+/** Takes care of JSON data */
+app.use(express.json());
+
+/** Init routes */
+app.use('/',apiRoutes)
+app.get('/migrate',migration.runMigration)
+app.get('/seeder',seeder.runSeeder)
 
 /** Error handling */
 app.use((req, res, next) => {
