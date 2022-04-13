@@ -2,16 +2,16 @@ const UserModal = require('./../models/User')
 const UserService = require('./../services/UserService')
 const OptService = require('./../services/OptService')
 const jwt = require("jsonwebtoken");
+const ExceptionResponse = require('./../responses/ExceptionResponse')
+const UnauthorizedResponse = require('./../responses/UnauthorizedResponse')
+const LoginResponse = require('./../responses/LoginResponse')
+const VerifyOtpResponse = require('./../responses/VerifyOtpResponse')
 
 const register = async (req, res, next) => {
     try {
         return await UserService.create(req, res)
     } catch (err) {
-        return res.status(500).send({
-            status: 'error',
-            status_code: 500,
-            message: err.message
-        })
+        return res.status(500).send(ExceptionResponse(err.message))
     }
 }
 
@@ -26,27 +26,12 @@ const login = async (req, res, next) => {
                     expiresIn: "2h",
                 }
             );
-            return res.status(200).send({
-                status: 'success',
-                status_code: 200,
-                message: 'success',
-                user,
-                token,
-                expiresIn: '2h'
-            })
+            return res.status(200).send(LoginResponse({user, token}))
         }
-        return res.status(401).send({
-            status: 'error',
-            status_code: 401,
-            message: 'Invalid credentials'
-        })
+        return res.status(401).send(UnauthorizedResponse('Invalid credentials'))
 
     }catch (err) {
-        return res.status(500).send({
-            status: 'error',
-            status_code: 500,
-            message: err.message
-        })
+        return res.status(500).send(ExceptionResponse(err.message))
     }
 }
 
@@ -63,25 +48,12 @@ const verifyOtp = async (req, res, next) => {
                     expiresIn: "3m",
                 }
             );
-            return res.status(200).send({
-                status: 'success',
-                status_code: 200,
-                message: 'OTP verified. Now you can login to continue to dashboard.',
-                token
-            })
+            return res.status(200).send(VerifyOtpResponse({token}))
         }else{
-            return res.status(401).send({
-                status: 'error',
-                status_code: 401,
-                message: 'Invalid OTP'
-            })
+            return res.status(401).send(UnauthorizedResponse('Invalid OTP'))
         }
     }catch (err) {
-        return res.status(500).send({
-            status: 'error',
-            status_code: 500,
-            message: err.message
-        })
+        return res.status(500).send(ExceptionResponse(err.message))
     }
 }
 
@@ -89,11 +61,7 @@ const forgetPassword = async (req, res, next) => {
     try{
         return await UserService.forgetPassword(req, res);
     }catch (err) {
-        return res.status(500).send({
-            status: 'error',
-            status_code: 500,
-            message: err.message
-        })
+        return res.status(500).send(ExceptionResponse(err.message))
     }
 }
 
@@ -101,11 +69,7 @@ const resetPassword = async (req, res, next) => {
     try{
         return await UserService.resetPassword(req, res)
     }catch (err) {
-        return res.status(500).send({
-            status: 'error',
-            status_code: 500,
-            message: err.message
-        })
+        return res.status(500).send(ExceptionResponse(err.message))
     }
 }
 
