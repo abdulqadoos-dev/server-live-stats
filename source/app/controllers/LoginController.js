@@ -9,6 +9,7 @@ const register = async (req, res, next) => {
     } catch (err) {
         return res.status(500).send({
             status: 'error',
+            status_code: 500,
             message: err.message
         })
     }
@@ -27,23 +28,23 @@ const login = async (req, res, next) => {
             );
             return res.status(200).send({
                 status: 'success',
+                status_code: 200,
                 message: 'success',
-                data: {
-                    user,
-                    token: token,
-                    expiresIn: '2h'
-                }
+                user,
+                token,
+                expiresIn: '2h'
             })
         }
         return res.status(401).send({
             status: 'error',
-            message: 'Invalid credentials',
-            data: {}
+            status_code: 401,
+            message: 'Invalid credentials'
         })
 
     }catch (err) {
         return res.status(500).send({
             status: 'error',
+            status_code: 500,
             message: err.message
         })
     }
@@ -64,20 +65,21 @@ const verifyOtp = async (req, res, next) => {
             );
             return res.status(200).send({
                 status: 'success',
+                status_code: 200,
                 message: 'OTP verified. Now you can login to continue to dashboard.',
-                data: {
-                    token
-                }
+                token
             })
         }else{
             return res.status(401).send({
                 status: 'error',
+                status_code: 401,
                 message: 'Invalid OTP'
             })
         }
     }catch (err) {
         return res.status(500).send({
             status: 'error',
+            status_code: 500,
             message: err.message
         })
     }
@@ -89,6 +91,7 @@ const forgetPassword = async (req, res, next) => {
     }catch (err) {
         return res.status(500).send({
             status: 'error',
+            status_code: 500,
             message: err.message
         })
     }
@@ -100,6 +103,7 @@ const resetPassword = async (req, res, next) => {
     }catch (err) {
         return res.status(500).send({
             status: 'error',
+            status_code: 500,
             message: err.message
         })
     }

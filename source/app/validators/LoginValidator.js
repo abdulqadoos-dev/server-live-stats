@@ -15,9 +15,14 @@ const loginValidator = [
 const runLoginValidation=(req,res,next)=>{
     const error=validationResult(req);
     if(!error.isEmpty()){
-        return res.status(401).send({
+        let validationErrors = {};
+        error.array().forEach(err => {
+            validationErrors[err.param] = err.msg;
+        })
+        return res.status(400).send({
             status:'error',
-            message:error.array().map(err => ({key:err.param, message:err.msg}))
+            status_code: 400,
+            errors: validationErrors
         })
     }
     next();

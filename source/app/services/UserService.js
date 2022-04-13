@@ -8,7 +8,8 @@ const create = async (req, res) => {
     if((await UserModal.findByEmail(email))?.id){
         return res.status(401).send({
             status: 'error',
-            message: 'email already taken',
+            status_code: 401,
+            message: 'Email already taken',
         })
     }
     const response = await UserModal.create({name, email, password, phone})
@@ -16,8 +17,9 @@ const create = async (req, res) => {
     OptService.sendOtp(otp, email)
     return res.status(200).send({
         status: 'success',
+        status_code: 200,
         message: 'Otp has been sent to your email.',
-        data: response
+        user: response
     })
 }
 
@@ -33,35 +35,42 @@ const forgetPassword = async (req, res) => {
         OptService.sendOtp(otp, email)
         return res.status(200).send({
             status: 'success',
+            status_code: 200,
             message: 'Otp has been sent to your email.',
-            data: user
+            user
         })
     }
     return res.status(404).send({
         status: 'error',
+        status_code: 404,
         message: 'Email does not exist.',
     })
 }
 
 const resetPassword = async (req, res) => {
-    let {signature, password} = req.body;
+    let signature = req.header('authorization');
+    const {password} = req.body;
     if (!signature) {
         return res.status(400).send({
             status: 'error',
+            status_code: 400,
             message: "A signature is required."
         });
     } else if(!password){
         return res.status(400).send({
             status: 'error',
+            status_code: 400,
             message: "A password is required."
         });
     }
+    signature = signature.split(" ")?.[1]
     let sigData = {};
     try{
         sigData = jwt.verify(signature, process.env.APP_KEY);
     }catch (err) {
         return res.status(401).send({
             status: 'error',
+            status_code: 401,
             message: "Invalid signature"
         });
     }
@@ -69,6 +78,7 @@ const resetPassword = async (req, res) => {
     await UserModal.update({id:user_id}, {password})
     return res.status(200).send({
         status: 'success',
+        status_code: 200,
         message: 'Password reset successfully'
     })
 }

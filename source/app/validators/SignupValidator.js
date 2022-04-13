@@ -11,7 +11,7 @@ const signupValidator = [
         .withMessage("enter a valid email"),
     check('password')
         .isLength({min:6})
-        .withMessage("password must be 6 chracter long"),
+        .withMessage("password must be 6 character long"),
     check('phone')
         .not()
         .isEmpty()
@@ -21,9 +21,14 @@ const signupValidator = [
 const runSignupValidation=(req,res,next)=>{
     const error=validationResult(req);
     if(!error.isEmpty()){
-        return res.status(401).send({
+        let validationErrors = {};
+        error.array().forEach(err => {
+            validationErrors[err.param] = err.msg;
+        })
+        return res.status(400).send({
             status:'error',
-            message:error.array().map(err => ({key:err.param, message:err.msg}))
+            status_code: 400,
+            errors: validationErrors
         })
     }
     next();
