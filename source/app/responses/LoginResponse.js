@@ -1,8 +1,6 @@
 const LoginResponse = ({user, token}) => {
     return {
-        status: 'success',
-        status_code: 200,
-        message: 'success',
+        message: 'Login successfully',
         user,
         token,
         expiresIn: '2h'

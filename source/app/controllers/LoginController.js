@@ -29,7 +29,6 @@ const login = async (req, res, next) => {
             return res.status(200).send(LoginResponse({user, token}))
         }
         return res.status(401).send(UnauthorizedResponse('Invalid credentials'))
-
     }catch (err) {
         return res.status(500).send(ExceptionResponse(err.message))
     }

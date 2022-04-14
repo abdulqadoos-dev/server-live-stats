@@ -20,9 +20,7 @@ const runLoginValidation=(req,res,next)=>{
             validationErrors[err.param] = err.msg;
         })
         return res.status(400).send({
-            status:'error',
-            status_code: 400,
-            errors: validationErrors
+            validationResults: validationErrors
         })
     }
     next();
