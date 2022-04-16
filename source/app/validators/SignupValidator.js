@@ -26,7 +26,7 @@ const runSignupValidation=(req,res,next)=>{
             validationErrors[err.param] = err.msg;
         })
         return res.status(400).send({
-            validationResult: validationErrors
+            validationResults: validationErrors
         })
     }
     next();

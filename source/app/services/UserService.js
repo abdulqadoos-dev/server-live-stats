@@ -10,48 +10,48 @@ const RegisterResponse = require('./../responses/RegisterResponse')
 const SuccessResponse = require('./../responses/SuccessResponse')
 
 const create = async (req, res) => {
-    const {name, email, password, phone} = req.body
-    if((await UserModal.findByEmail(email))?.id){
-        return res.status(401).send(UnauthorizedResponse('Email already taken'))
+    const { name, email, password, phone } = req.body
+    if ((await UserModal.findByEmail(email))?.id) {
+        return res.status(400).send({ validationResults: { email: "Email already taken" } })
     }
-    const response = await UserModal.create({name, email, password, phone})
+    const response = await UserModal.create({ name, email, password, phone })
     const otp = await OptService.generateOtp(response.id)
     OptService.sendOtp(otp, email)
-    return res.status(200).send(RegisterResponse({user: response}))
+    return res.status(200).send(RegisterResponse({ user: response }))
 }
 
 const updateEmailVerified = async (id) => {
-    await UserModal.update({id}, {emailVerifiedAt:dateTime});
+    await UserModal.update({ id }, { emailVerifiedAt: dateTime });
 }
 
 const forgetPassword = async (req, res) => {
-    const {email} = req.body;
+    const { email } = req.body;
     const user = await UserModal.findByEmail(email);
-    if(user){
+    if (user) {
         const otp = await OptService.generateOtp(user.id)
         OptService.sendOtp(otp, email)
-        return res.status(200).send(RegisterResponse({user}))
+        return res.status(200).send(RegisterResponse({ user }))
     }
-    return res.status(404).send(NotFoundResponse('Email does not exist'))
+    return res.status(400).send({ validationResults: { email: "Email does not exist" } })
 }
 
 const resetPassword = async (req, res) => {
     let signature = req.header('authorization');
-    const {password} = req.body;
+    const { password } = req.body;
     if (!signature) {
         return res.status(403).send(ForbiddenResponse("Signature is required"));
-    } else if(!password){
+    } else if (!password) {
         return res.status(400).send(BadRequestResponse("Password is required"));
     }
     signature = signature.split(" ")?.[1]
     let sigData = {};
-    try{
+    try {
         sigData = jwt.verify(signature, process.env.APP_KEY);
-    }catch (err) {
-        return res.status(401).send(UnauthorizedResponse("Invalid signature"));
+    } catch (err) {
+        return res.status(400).send(UnauthorizedResponse("Invalid signature"));
     }
-    const {user_id} = sigData;
-    await UserModal.update({id:user_id}, {password})
+    const { user_id } = sigData;
+    await UserModal.update({ id: user_id }, { password })
     return res.status(200).send(SuccessResponse('Password reset successfully'))
 }
 
