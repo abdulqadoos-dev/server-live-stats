@@ -5,6 +5,7 @@ const seeder = require('./database/seeder');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
+const db = require("./app/models/index");
 
 app.use(cors())
 
@@ -28,6 +29,12 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: false }));
 /** Takes care of JSON data */
 app.use(express.json());
+
+/** DB initialize*/
+// db.sequelize.sync();     // For production
+db.sequelize.sync({ force: true }).then(() => {
+    console.log("Drop and re-sync db.");
+});     //      For development
 
 /** Init routes */
 app.use('/',apiRoutes)

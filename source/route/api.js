@@ -2,6 +2,7 @@ const express = require('express');
 const routes = express.Router();
 const UserController = require('./../app/controllers/UserController')
 const LoginController = require('./../app/controllers/LoginController')
+const SportController = require('./../app/controllers/SportController')
 const {runSignupValidation, signupValidator} = require('./../app/validators/SignupValidator')
 const {loginValidator, runLoginValidation} = require('./../app/validators/LoginValidator')
 const authMiddleware = require('./../app/middlewares/auth')
@@ -21,5 +22,9 @@ routes.post('/reset-password', LoginController.resetPassword)
 /** Users */
 routes.get('/users', authMiddleware, UserController.getUsers)
 routes.get('/users/:id', UserController.getUsers)
+
+/** Sports route*/
+routes.get('/sports', SportController.getAll);
+routes.get('/sports/create', SportController.create);
 
 module.exports = routes
