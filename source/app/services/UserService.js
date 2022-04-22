@@ -39,16 +39,16 @@ const resetPassword = async (req, res) => {
     let signature = req.header('authorization');
     const { password } = req.body;
     if (!signature) {
-        return res.status(403).send(ForbiddenResponse("Signature is required"));
+        return res.status(403).send({ error: "Signature is required" });
     } else if (!password) {
-        return res.status(400).send(BadRequestResponse("Password is required"));
+        return res.status(400).send({ validationResults: { password: "Password is required" } });
     }
     signature = signature.split(" ")?.[1]
     let sigData = {};
     try {
         sigData = jwt.verify(signature, process.env.APP_KEY);
     } catch (err) {
-        return res.status(400).send(UnauthorizedResponse("Invalid signature"));
+        return res.status(403).send({ error: "Invalid signature" });
     }
     const { user_id } = sigData;
     await UserModal.update({ id: user_id }, { password })
