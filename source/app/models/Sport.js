@@ -1,8 +1,4 @@
-const db = require("./index");
-const Sequelize = db.Sequelize;
-const sequelize = db.sequelize;
-
-const model = () => {
+module.exports = (Sequelize, sequelize) => {
     return sequelize.define("sports", {
         name: {
             type: Sequelize.STRING
@@ -29,9 +25,4 @@ const model = () => {
             type: Sequelize.INTEGER
         }
     })
-}
-
-module.exports = {
-    db: db,
-    model: model()
 }

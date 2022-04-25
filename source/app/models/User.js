@@ -33,7 +33,7 @@ const create = async (data) => {
 const authenticate = async (email, password) => {
     let res = await db.query(`SELECT * FROM ${table} WHERE (email=$1 OR phone=$2) AND email_verified_at <= $3`, [email, email, getDate()]);
     res = res.rows[0] || null
-    if(res.password && bcrypt.compareSync(password, res.password)){
+    if(res?.password && bcrypt.compareSync(password, res.password)){
         return res;
     }
     return null;

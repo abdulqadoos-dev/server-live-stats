@@ -31,10 +31,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 /** DB initialize*/
-// db.sequelize.sync();     // For production
-db.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and re-sync db.");
-});     //      For development
+db.sequelize.sync();     // For production
+// db.sequelize.sync({ force: true }).then(() => {
+//     console.log("Drop and re-sync db.");
+// });     //      For development
 
 /** Init routes */
 app.use('/',apiRoutes)
