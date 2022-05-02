@@ -15,7 +15,11 @@ const signupValidator = [
     check('phone')
         .not()
         .isEmpty()
-        .withMessage("phone is required")
+        .withMessage("phone is required"),
+    check('isAgree')
+        .not()
+        .isEmpty()
+        .withMessage("isAgree is required")
 ]
 
 const runSignupValidation=(req,res,next)=>{

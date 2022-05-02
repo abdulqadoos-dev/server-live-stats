@@ -1,4 +1,7 @@
 const dbConfigs = require('./../../config/db.configs');
+const fs = require('fs');
+const path = require('path');
+const basename = path.basename(__filename);
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(dbConfigs.DB, dbConfigs.USER, dbConfigs.PASSWORD, {
     host: dbConfigs.HOST,
@@ -13,13 +16,17 @@ const sequelize = new Sequelize(dbConfigs.DB, dbConfigs.USER, dbConfigs.PASSWORD
 });
 
 const db={};
+
+fs
+    .readdirSync(__dirname)
+    .filter(file => {
+        return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+    })
+    .forEach(file => {
+        const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+        db[model.name] = model;
+    });
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.games = require('./Game')(Sequelize, sequelize);
-db.media = require('./Media')(Sequelize, sequelize);
-db.otps = require('./Opt')(Sequelize, sequelize);
-db.profiles = require('./Profile')(Sequelize, sequelize);
-db.rosters = require('./Roster')(Sequelize, sequelize);
-db.scores = require('./Score')(Sequelize, sequelize);
-db.sports = require('./Sport')(Sequelize, sequelize);
 module.exports = db;

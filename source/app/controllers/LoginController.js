@@ -1,4 +1,3 @@
-const UserModal = require('./../models/User')
 const UserService = require('./../services/UserService')
 const OptService = require('./../services/OptService')
 const jwt = require("jsonwebtoken");
@@ -17,10 +16,10 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     try {
-        const user = await UserModal.authenticate(req.body.email, req.body.password)
+        const user = await UserService.authenticate(req.body.email, req.body.password)
         if (user) {
             const token = jwt.sign(
-                { user_id: user.id },
+                { userId: user.id },
                 process.env.APP_KEY,
                 {
                     expiresIn: "2h",
@@ -41,7 +40,7 @@ const verifyOtp = async (req, res, next) => {
         if (verify) {
             await UserService.updateEmailVerified(user_id)
             const token = jwt.sign(
-                { user_id: user_id },
+                { userId: user_id },
                 process.env.APP_KEY,
                 {
                     expiresIn: "3m",

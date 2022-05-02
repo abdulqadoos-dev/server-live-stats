@@ -1,28 +1,30 @@
-module.exports = (Sequelize, sequelize) => {
-    return sequelize.define("sports", {
-        name: {
-            type: Sequelize.STRING
-        },
-        description: {
-            type: Sequelize.STRING
-        },
-        icon: {
-            type: Sequelize.STRING
-        },
-        match_time:{
-            type: Sequelize.INTEGER
-        },
-        match_half_time:{
-            type: Sequelize.INTEGER
-        },
-        no_players_required:{
-            type: Sequelize.INTEGER
-        },
-        min_no_players:{
-            type: Sequelize.INTEGER
-        },
-        max_no_players:{
-            type: Sequelize.INTEGER
+'use strict';
+const {
+    Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+    class Sport extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
         }
-    })
-}
+    }
+    Sport.init({
+        name: DataTypes.STRING,
+        description: DataTypes.STRING,
+        icon: DataTypes.STRING,
+        matchTime: DataTypes.INTEGER,
+        matchHalfTime: DataTypes.INTEGER,
+        noPlayerRequired: DataTypes.INTEGER,
+        minNoPlayers: DataTypes.INTEGER,
+        maxNoPlayers: DataTypes.INTEGER,
+    }, {
+        sequelize,
+        modelName: 'sport',
+    });
+    return Sport;
+};

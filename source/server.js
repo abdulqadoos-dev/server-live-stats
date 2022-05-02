@@ -1,11 +1,8 @@
 const express = require('express');
 const apiRoutes = require('./route/api');
-const migration = require('./database/migration');
-const seeder = require('./database/seeder');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
-const db = require("./app/models/index");
 
 app.use(cors())
 
@@ -30,16 +27,8 @@ app.use(express.urlencoded({ extended: false }));
 /** Takes care of JSON data */
 app.use(express.json());
 
-/** DB initialize*/
-db.sequelize.sync();     // For production
-// db.sequelize.sync({ force: true }).then(() => {
-//     console.log("Drop and re-sync db.");
-// });     //      For development
-
 /** Init routes */
 app.use('/',apiRoutes)
-app.get('/migrate',migration.runMigration)
-app.get('/seeder',seeder.runSeeder)
 
 /** Error handling */
 app.use((req, res, next) => {
