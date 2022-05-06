@@ -27,6 +27,11 @@ app.use(express.urlencoded({ extended: false }));
 /** Takes care of JSON data */
 app.use(express.json());
 
+/** Function to serve all static files */
+/** inside public directory. */
+app.use(express.static('public'));
+app.use('/images', express.static('images'));
+
 /** Init routes */
 app.use('/',apiRoutes)
 

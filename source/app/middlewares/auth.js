@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const UserModal = require('./../models/index').user;
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
     let token =
         req.body.token || req.query.token || req.header('authorization');
     if (!token) {
@@ -11,7 +12,8 @@ const verifyToken = (req, res, next) => {
     }
     try {
         token = token.split(" ");
-        req.user = jwt.verify(token[1], process.env.APP_KEY);
+        req.jwtData = jwt.verify(token[1], process.env.APP_KEY);
+        req.user = await UserModal.findByPk(req.jwtData.userId)
     } catch (err) {
         return res.status(401).send({
             status: 'error',
