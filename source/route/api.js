@@ -4,13 +4,16 @@ const UserController = require('./../app/controllers/UserController')
 const LoginController = require('./../app/controllers/LoginController')
 const SportController = require('./../app/controllers/SportController')
 const ProfileController = require('./../app/controllers/ProfileController')
+const TeamController = require('./../app/controllers/TeamController')
 const {runSignupValidation, signupValidator} = require('./../app/validators/SignupValidator')
 const {loginValidator, runLoginValidation} = require('./../app/validators/LoginValidator')
 const authMiddleware = require('./../app/middlewares/auth')
-const {createProfileValidator, runCreateProfileValidator} = require('./../app/validators/CreateProfileValidator')
+const CreateProfileValidator = require('./../app/validators/CreateProfileValidator')
+const CreateTeamValidator = require('./../app/validators/CreateTeamValidator')
+const RunValidation = require('./../app/validators/RunValidation')
 
 routes.get('/', (req, res, next)=>{
-    res.json('Hello world')
+    res.json('Welcome to Nodejs app')
 })
 
 /** Auth routes*/
@@ -22,7 +25,7 @@ routes.post('/reset-password', LoginController.resetPassword)
 /** ends */
 
 /** Profile Routes*/
-routes.post('/profile', authMiddleware, createProfileValidator, runCreateProfileValidator, ProfileController.create)
+routes.post('/profile', authMiddleware, CreateProfileValidator, RunValidation, ProfileController.create)
 /** Ends */
 
 /** Users */
@@ -33,5 +36,9 @@ routes.get('/users/:id', UserController.getUsers)
 /** Sports route*/
 routes.get('/sports', authMiddleware, SportController.get)
 /** Ends */
+
+/** Team routes*/
+routes.post('/team', authMiddleware, CreateTeamValidator, RunValidation, TeamController.create);
+/** Ends*/
 
 module.exports = routes
