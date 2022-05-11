@@ -6,9 +6,10 @@ const RoleModal = modelInstance.role;
 const SportModal = modelInstance.sport;
 const SchoolModal = modelInstance.school;
 const UserModal = modelInstance.user;
+const PlayerService = require('./PlayerService')
 
 const create = async (req, res) => {
-    const {roleId, sportId} = req.body
+    const {roleId, sportId, rosters} = req.body
     if (!(await RoleModal.findByPk(roleId))?.id) {
         return res.status(400).send(RequestValidationResponse({roleId:'Role id is incorrect'}));
     }
@@ -24,9 +25,9 @@ const create = async (req, res) => {
             state: req.body.state
         })
     }
-    const team = (await TeamModal.findAll({where:{userId: req.user.id,}}))?.[0] || null
+    let team = (await TeamModal.findAll({where:{userId: req.user.id,}}))?.[0] || null
     if(!team){
-        await TeamModal.create({
+        team = await TeamModal.create({
             userId: req.user.id,
             schoolId: school.id,
             sportId,
@@ -35,6 +36,7 @@ const create = async (req, res) => {
             gender: req.body.gender
         })
     }
+    await PlayerService.create(rosters, team.id)
     return res.send(SuccessResponse('Team created successfully'))
 }
 
