@@ -11,6 +11,7 @@ const authMiddleware = require('./../app/middlewares/auth')
 const CreateProfileValidator = require('./../app/validators/CreateProfileValidator')
 const CreateTeamValidator = require('./../app/validators/CreateTeamValidator')
 const RunValidation = require('./../app/validators/RunValidation')
+const PlayerController = require('./../app/controllers/PlayerController')
 
 routes.get('/', (req, res, next)=>{
     res.json('Welcome to Nodejs app')
@@ -39,6 +40,14 @@ routes.get('/sports', authMiddleware, SportController.get)
 
 /** Team routes*/
 routes.post('/team', authMiddleware, CreateTeamValidator, RunValidation, TeamController.create);
+/** Ends*/
+
+/** Player routes*/
+routes.get('/players/', authMiddleware, PlayerController.get);
+routes.get('/players/:teamId', authMiddleware, PlayerController.get);
+routes.post('/player', authMiddleware, PlayerController.create);
+routes.put('/player/:id', authMiddleware, PlayerController.update);
+routes.delete('/player/:id', authMiddleware, PlayerController.deletePlayer)
 /** Ends*/
 
 module.exports = routes

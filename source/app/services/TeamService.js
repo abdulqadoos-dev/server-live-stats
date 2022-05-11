@@ -36,7 +36,7 @@ const create = async (req, res) => {
             gender: req.body.gender
         })
     }
-    await PlayerService.create(rosters, team.id)
+    await PlayerService.bulkCreate(rosters, team.id)
     return res.send(SuccessResponse('Team created successfully'))
 }
 
