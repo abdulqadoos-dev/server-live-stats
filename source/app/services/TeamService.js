@@ -40,6 +40,10 @@ const create = async (req, res) => {
     return res.send(SuccessResponse('Team created successfully'))
 }
 
+const getByUserId = async (userId) => {
+    return (await TeamModal.findAll({where:{userId}}))?.[0] || null
+}
+
 module.exports = {
-    create
+    create, getByUserId
 }

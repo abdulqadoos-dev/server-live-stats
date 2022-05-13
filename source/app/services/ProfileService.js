@@ -25,6 +25,10 @@ const create = async (req, res) => {
     return res.send(SuccessResponse('Profile created successfully'))
 }
 
+const getByUserId = async (userId) => {
+    return (await ProfileModal.findAll({where:{userId}}))?.[0] || null
+}
+
 module.exports = {
-    create
+    create, getByUserId
 }
