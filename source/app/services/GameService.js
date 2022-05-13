@@ -5,6 +5,10 @@ const create = async ({sportId, dateTime, location, team1Id, team2Id, team1PlayG
     return await GameModal.create({sportId, dateTime, location, team1Id, team2Id, team1PlayGround, team2PlayGround})
 }
 
+const getAll = async () => {
+    return await GameModal.findAll();
+}
+
 module.exports = {
-    create
+    create, getAll
 }

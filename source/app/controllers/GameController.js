@@ -3,6 +3,7 @@ const GameService = require("../services/GameService");
 const SuccessResponse = require("../responses/SuccessResponse");
 const RequestValidationResponse = require("../responses/RequestValidationResponse");
 const modelInstance = require("../models");
+const GetAllGamesResponse = require("../responses/GetAllGamesResponse");
 const SportModal = modelInstance.sport;
 const TeamModal = modelInstance.team;
 
@@ -18,6 +19,19 @@ const create = async (req, res, next) => {
     }
 }
 
+const getAll = async (req, res, next) => {
+    try{
+        const games = await GameService.getAll();
+        return res.send(GetAllGamesResponse(games))
+    }catch (err) {
+        return res.status(500).send(ExceptionResponse(err.message))
+    }
+}
+
+module.exports = {
+    create, getAll
+}
+
 const validateIds = async ({sportId, team1Id, team2Id}, res) => {
     if (!(await SportModal.findByPk(sportId))?.id) {
         return res.status(400).send(RequestValidationResponse({sportId: 'Sport id is incorrect'}));
@@ -29,8 +43,4 @@ const validateIds = async ({sportId, team1Id, team2Id}, res) => {
         return res.status(400).send(RequestValidationResponse({sportId: 'Team 2 id is incorrect'}));
     }
     return false;
-}
-
-module.exports = {
-    create
 }

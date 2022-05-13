@@ -54,6 +54,7 @@ routes.delete('/player/:id', authMiddleware, PlayerController.deletePlayer)
 
 /** Game routes*/
 routes.post('/game/create', authMiddleware, CreateGameValidator, RunValidation, GameController.create)
+routes.get('/games', authMiddleware, GameController.getAll)
 /** Ends*/
 
 module.exports = routes
