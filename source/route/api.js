@@ -14,6 +14,7 @@ const RunValidation = require('./../app/validators/RunValidation')
 const PlayerController = require('./../app/controllers/PlayerController')
 const GameController = require('./../app/controllers/GameController')
 const CreateGameValidator = require('./../app/validators/CreateGameValidator')
+const CreatePlayerValidator = require('./../app/validators/CreatePlayerValidator')
 
 routes.get('/', (req, res, next)=>{
     res.json('Welcome to Nodejs app')
@@ -45,11 +46,12 @@ routes.post('/team', authMiddleware, CreateTeamValidator, RunValidation, TeamCon
 /** Ends*/
 
 /** Player routes*/
-routes.get('/players/', authMiddleware, PlayerController.get);
+routes.get('/players', authMiddleware, PlayerController.get);
 routes.get('/players/:teamId', authMiddleware, PlayerController.get);
 routes.post('/player', authMiddleware, PlayerController.create);
 routes.put('/player/:id', authMiddleware, PlayerController.update);
 routes.delete('/player/:id', authMiddleware, PlayerController.deletePlayer)
+routes.post('/players', authMiddleware, CreatePlayerValidator, RunValidation, PlayerController.saveNewBulk)
 /** Ends*/
 
 /** Game routes*/

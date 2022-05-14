@@ -46,6 +46,18 @@ const get = async (req, res, next) => {
     }
 }
 
+const saveNewBulk = async (req, res, next) => {
+    try{
+        const {teamId, rosters} = req.body;
+        const ids = rosters.filter(roster => !!roster.id).map(roster => roster.id)
+        await PlayerService.deleteByTeamIdAndExcludeIds(teamId, ids)
+        await PlayerService.bulkCreate(rosters, teamId)
+        return res.send(SuccessResponse('Players saved successfully'))
+    }catch (err) {
+        return res.status(500).send(ExceptionResponse(err.message))
+    }
+}
+
 module.exports = {
-    create, update, deletePlayer, get
+    create, update, deletePlayer, get, saveNewBulk
 }

@@ -1,6 +1,7 @@
 const modelInstance = require('./../models/index')
 const PlayerModel = modelInstance.player;
 const RosterService = require('./RosterService')
+const { Op } = require("sequelize");
 
 const getAll = async (teamId = null) => {
     return await PlayerModel.findAll(teamId ? {where:{teamId}} : {})
@@ -16,8 +17,8 @@ const create = async (player, teamId) => {
 
 const bulkCreate = async (players, teamId) => {
     for (let player of players) {
-        const response = await create(player, teamId)
-        await RosterService.create({teamId, playerId: response.id})
+        const response = player?.id ? await update(player, player.id) : await create(player, teamId)
+        await RosterService.create({teamId, playerId: player?.id || response.id})
     }
 }
 
@@ -29,6 +30,18 @@ const deletePlayer = async (id) => {
     await RosterService.deleteByPlayerId(id)
     return await PlayerModel.destroy({where:{id}})
 }
+
+const deleteByTeamIdAndExcludeIds = async (teamId, ids) => {
+    await RosterService.deleteByTeamIdAndExcludePlayerIds(teamId, ids)
+    return await PlayerModel.destroy({
+        where:{
+            teamId,
+            id: {
+                [Op.notIn]: ids
+            }
+        }
+    })
+}
 module.exports = {
-    create, bulkCreate, update, deletePlayer, getAll
+    create, bulkCreate, update, deletePlayer, getAll, deleteByTeamIdAndExcludeIds
 }
