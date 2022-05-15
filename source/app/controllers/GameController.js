@@ -28,8 +28,21 @@ const getAll = async (req, res, next) => {
     }
 }
 
+const verifyScheduleTime = async (req, res, next) => {
+    try{
+        const {dateTime, team1Id, team2Id} = req.body;
+        if(await GameService.verifyScheduleTime({dateTime, team1Id, team2Id})){
+            return res.send(SuccessResponse('Time available'))
+        }
+        return res.send(SuccessResponse('Time not available'))
+
+    }catch (err) {
+        return res.status(500).send(ExceptionResponse(err.message))
+    }
+}
+
 module.exports = {
-    create, getAll
+    create, getAll, verifyScheduleTime
 }
 
 const validateIds = async ({sportId, team1Id, team2Id}, res) => {

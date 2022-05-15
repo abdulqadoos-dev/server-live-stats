@@ -9,6 +9,11 @@ const randomIntGenerator = (min, max) => {
 
 const camelToSnakeCase  = string => string.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 
+const addHoursToDate = (date, hours) => {
+    let result = new Date(date);
+    result.setTime(result.getTime() + (hours*60*60*1000));
+    return result;
+}
 module.exports = {
-    getDate, randomIntGenerator, camelToSnakeCase
+    getDate, randomIntGenerator, camelToSnakeCase, addHoursToDate
 }
