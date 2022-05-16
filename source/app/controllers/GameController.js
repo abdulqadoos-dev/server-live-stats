@@ -6,6 +6,7 @@ const modelInstance = require("../models");
 const GetAllGamesResponse = require("../responses/GetAllGamesResponse");
 const SportModal = modelInstance.sport;
 const TeamModal = modelInstance.team;
+const SuccessWithDataResponse = require('./../responses/SuccessWithDataResponse')
 
 const create = async (req, res, next) => {
     try{
@@ -32,9 +33,9 @@ const verifyScheduleTime = async (req, res, next) => {
     try{
         const {dateTime, team1Id, team2Id} = req.body;
         if(await GameService.verifyScheduleTime({dateTime, team1Id, team2Id})){
-            return res.send(SuccessResponse('Time available'))
+            return res.send(SuccessWithDataResponse({isScheduled:true}))
         }
-        return res.send(SuccessResponse('Time not available'))
+        return res.send(SuccessWithDataResponse({isScheduled:false}))
 
     }catch (err) {
         return res.status(500).send(ExceptionResponse(err.message))

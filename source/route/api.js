@@ -57,7 +57,7 @@ routes.post('/players', authMiddleware, CreatePlayerValidator, RunValidation, Pl
 /** Game routes*/
 routes.post('/game/create', authMiddleware, CreateGameValidator, RunValidation, GameController.create)
 routes.get('/games', authMiddleware, GameController.getAll)
-routes.get('/games/verify-schedule-time', authMiddleware, GameController.verifyScheduleTime)
+routes.post('/games/verify-schedule-time', authMiddleware, GameController.verifyScheduleTime)
 /** Ends*/
 
 module.exports = routes
