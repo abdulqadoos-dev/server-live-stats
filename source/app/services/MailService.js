@@ -11,6 +11,7 @@ const send = (to, subject, body, from=null) => {
     const mailOptions = {
         from: from || process.env.MAILER_USER,
         to: to,
+        secure: false,
         subject: subject,
         html: body
     };
