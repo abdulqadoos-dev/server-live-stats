@@ -15,6 +15,7 @@ const PlayerController = require('./../app/controllers/PlayerController')
 const GameController = require('./../app/controllers/GameController')
 const CreateGameValidator = require('./../app/validators/CreateGameValidator')
 const CreatePlayerValidator = require('./../app/validators/CreatePlayerValidator')
+const VerifyScheduleTimeValidator = require('./../app/validators/VerifyScheduleTimeValidator')
 
 routes.get('/', (req, res, next)=>{
     res.json('Welcome to Nodejs app')
@@ -43,6 +44,7 @@ routes.get('/sports', authMiddleware, SportController.get)
 
 /** Team routes*/
 routes.post('/team', authMiddleware, CreateTeamValidator, RunValidation, TeamController.create);
+routes.get('/teams', authMiddleware, TeamController.geAll)
 /** Ends*/
 
 /** Player routes*/
@@ -57,7 +59,7 @@ routes.post('/players', authMiddleware, CreatePlayerValidator, RunValidation, Pl
 /** Game routes*/
 routes.post('/game/create', authMiddleware, CreateGameValidator, RunValidation, GameController.create)
 routes.get('/games', authMiddleware, GameController.getAll)
-routes.post('/games/verify-schedule-time', authMiddleware, GameController.verifyScheduleTime)
+routes.post('/games/verify-schedule-time', authMiddleware, VerifyScheduleTimeValidator, RunValidation, GameController.verifyScheduleTime)
 /** Ends*/
 
 module.exports = routes

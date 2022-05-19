@@ -44,6 +44,10 @@ const getByUserId = async (userId) => {
     return (await TeamModal.findAll({where:{userId}}))?.[0] || null
 }
 
+const getAll = async () => {
+    return await TeamModal.findAll();
+}
+
 module.exports = {
-    create, getByUserId
+    create, getByUserId, getAll
 }
