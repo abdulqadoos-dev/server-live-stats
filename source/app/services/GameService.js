@@ -8,7 +8,7 @@ const create = async ({sportId, dateTime, location, team1Id, team2Id, team1PlayG
 }
 
 const getAll = async () => {
-    return await GameModal.findAll();
+    return await GameModal.findAll({raw:true});
 }
 
 const verifyScheduleTime = async ({dateTime = new Date(), team1Id, team2Id}) => {

@@ -1,5 +1,7 @@
 const ExceptionResponse = require("../responses/ExceptionResponse");
 const GameService = require("../services/GameService");
+const TeamService = require("../services/TeamService");
+const SportService = require("../services/SportService");
 const SuccessResponse = require("../responses/SuccessResponse");
 const RequestValidationResponse = require("../responses/RequestValidationResponse");
 const modelInstance = require("../models");
@@ -23,6 +25,13 @@ const create = async (req, res, next) => {
 const getAll = async (req, res, next) => {
     try{
         const games = await GameService.getAll();
+        let gameDetails = [];
+        for (let game of games) {
+            game.team1 = await TeamService.getById(game.team1Id);
+            game.team2 = await TeamService.getById(game.team2Id);
+            game.sport = await SportService.getById(game.sportId);
+            gameDetails.push(game)
+        }
         return res.send(GetAllGamesResponse(games))
     }catch (err) {
         return res.status(500).send(ExceptionResponse(err.message))

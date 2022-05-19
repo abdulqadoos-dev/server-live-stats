@@ -48,6 +48,10 @@ const getAll = async () => {
     return await TeamModal.findAll({ raw: true,});
 }
 
+const getById = async (id) => {
+    return await TeamModal.findByPk(id, {raw: true})
+}
+
 module.exports = {
-    create, getByUserId, getAll
+    create, getByUserId, getAll, getById
 }
