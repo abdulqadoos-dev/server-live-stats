@@ -41,11 +41,11 @@ const create = async (req, res) => {
 }
 
 const getByUserId = async (userId) => {
-    return (await TeamModal.findAll({where:{userId}}))?.[0] || null
+    return (await TeamModal.findAll({where:{userId}, raw: true}))?.[0] || null
 }
 
 const getAll = async () => {
-    return await TeamModal.findAll();
+    return await TeamModal.findAll({ raw: true,});
 }
 
 module.exports = {

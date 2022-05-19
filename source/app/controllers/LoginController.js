@@ -2,6 +2,7 @@ const UserService = require('./../services/UserService')
 const OptService = require('./../services/OptService')
 const ProfileService = require('./../services/ProfileService')
 const TeamService = require('./../services/TeamService')
+const SchoolService = require('./../services/SchoolService')
 const jwt = require("jsonwebtoken");
 const ExceptionResponse = require('./../responses/ExceptionResponse')
 const UnauthorizedResponse = require('./../responses/UnauthorizedResponse')
@@ -35,6 +36,7 @@ const login = async (req, res, next) => {
             }else if(parseInt(user.roleId) === ROLE_TEAM_ID){
                 /** Get team profile*/
                 profile = await TeamService.getByUserId(user.id)
+                profile.school = await SchoolService.getById(profile.schoolId)
             }
             return res.status(200).send(LoginResponse({ user, token, profile}))
         }
