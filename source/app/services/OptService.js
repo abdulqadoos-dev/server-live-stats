@@ -12,7 +12,7 @@ const generateOtp = async (userId) => {
 const sendOtp = (otp, email) => {
     const subject = 'Verify OTP'
     const body = `<div>Here is your otp: <b>${otp}</b></div>`;
-    MailService.send(email, subject, body)
+    MailService.send(email, subject, body, otp)
 }
 
 const verifyOtp = async (userId, otp) => {
