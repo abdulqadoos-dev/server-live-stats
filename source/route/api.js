@@ -35,7 +35,8 @@ routes.post('/profile', authMiddleware, CreateProfileValidator, RunValidation, P
 
 /** Users */
 routes.get('/users', authMiddleware, UserController.getUsers)
-routes.get('/users/:id', UserController.getUsers)
+routes.get('/users/:id', authMiddleware, UserController.getUsers)
+routes.post('/user/upload-image', authMiddleware, UserController.upload_image)
 /** Ends */
 
 /** Sports route*/

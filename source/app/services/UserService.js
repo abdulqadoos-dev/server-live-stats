@@ -71,6 +71,10 @@ const authenticate = async (email, password) => {
     return null;
 }
 
+const save_image = async (image, id) => {
+    return await UserModal.update({image},{where:{id}});
+}
+
 module.exports = {
-    create, updateEmailVerified, forgetPassword, resetPassword, authenticate
+    create, updateEmailVerified, forgetPassword, resetPassword, authenticate, save_image
 }

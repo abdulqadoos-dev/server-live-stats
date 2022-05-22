@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     rememberToken: DataTypes.STRING,
     isAgree: DataTypes.BOOLEAN,
     roleId: DataTypes.INTEGER,
+    image: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'user',
