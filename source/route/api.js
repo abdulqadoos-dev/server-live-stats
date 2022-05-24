@@ -16,6 +16,7 @@ const GameController = require('./../app/controllers/GameController')
 const CreateGameValidator = require('./../app/validators/CreateGameValidator')
 const CreatePlayerValidator = require('./../app/validators/CreatePlayerValidator')
 const VerifyScheduleTimeValidator = require('./../app/validators/VerifyScheduleTimeValidator')
+const uploadUserImageMiddleware = require('./../app/middlewares/UploadUserImageMiddleware')
 
 routes.get('/', (req, res, next)=>{
     res.json('Welcome to Nodejs app')
@@ -36,7 +37,7 @@ routes.post('/profile', authMiddleware, CreateProfileValidator, RunValidation, P
 /** Users */
 routes.get('/users', authMiddleware, UserController.getUsers)
 routes.get('/users/:id', authMiddleware, UserController.getUsers)
-routes.post('/user/upload-image', authMiddleware, UserController.upload_image)
+routes.post('/user/upload-image', authMiddleware, uploadUserImageMiddleware.single('image'), UserController.upload_image)
 /** Ends */
 
 /** Sports route*/

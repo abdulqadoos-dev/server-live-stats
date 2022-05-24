@@ -10,7 +10,7 @@ module.exports = {
      */
     await queryInterface.addColumn('users', 'image', {
       type: Sequelize.STRING,
-      defaultValue: '/images/users/default-avatar.png'
+      defaultValue: '/images/default-avatar.png'
     })
   },
 

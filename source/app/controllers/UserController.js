@@ -2,7 +2,7 @@ const modelInstance = require('./../models/index')
 const ExceptionResponse = require("../responses/ExceptionResponse");
 const UserModal = modelInstance.user;
 const UserService = require('./../services/UserService')
-const SuccessResponse = require("../responses/SuccessResponse");
+const SuccessWithDataResponse = require("../responses/SuccessWithDataResponse");
 
 const getUsers = async (req, res, next) => {
     try{
@@ -24,9 +24,9 @@ const getUsers = async (req, res, next) => {
 
 const upload_image = async (req, res, next) => {
     try{
-        const {image} = req.body;
-        await UserService.save_image(image, req.user.id)
-        return res.send(SuccessResponse('Image uploaded successfully'))
+        const image = req.file;
+        const url = await UserService.save_image(image, req.user.id)
+        return res.send(SuccessWithDataResponse({image: url}))
     }catch (err) {
         return res.status(500).send(ExceptionResponse(err.message))
     }

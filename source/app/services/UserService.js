@@ -72,7 +72,9 @@ const authenticate = async (email, password) => {
 }
 
 const save_image = async (image, id) => {
-    return await UserModal.update({image},{where:{id}});
+    image = (image.path.replace(/\\/gi, "/")).replace('public','');
+    await UserModal.update({image:image},{where:{id}});
+    return image;
 }
 
 module.exports = {
