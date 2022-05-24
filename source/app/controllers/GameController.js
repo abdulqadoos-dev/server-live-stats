@@ -24,7 +24,8 @@ const create = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
     try{
-        const games = await GameService.getAll();
+        const {teamId} = req.params
+        const games = await GameService.getAll(teamId);
         let gameDetails = [];
         for (let game of games) {
             game.team1 = await TeamService.getById(game.team1Id);
