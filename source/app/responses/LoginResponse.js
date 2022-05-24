@@ -17,6 +17,7 @@ const filterUserResponse = (user, profile) => {
         roleId: user.roleId,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        image: user.image,
         profile
     }
 }
