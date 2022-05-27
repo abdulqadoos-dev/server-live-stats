@@ -32,6 +32,7 @@ routes.post('/reset-password', LoginController.resetPassword)
 
 /** Profile Routes*/
 routes.post('/profile', authMiddleware, CreateProfileValidator, RunValidation, ProfileController.create)
+routes.get('/profile', authMiddleware, ProfileController.get)
 /** Ends */
 
 /** Users */
