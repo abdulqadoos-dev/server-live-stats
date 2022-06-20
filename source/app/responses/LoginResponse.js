@@ -1,5 +1,5 @@
-const LoginResponse = ({user, token, profile}) => {
-    user = filterUserResponse(user, profile)
+const LoginResponse = ({user, token}) => {
+    user = filterUserResponse(user)
     return {
         message: 'Login successfully',
         user,
@@ -8,7 +8,7 @@ const LoginResponse = ({user, token, profile}) => {
     }
 }
 
-const filterUserResponse = (user, profile) => {
+const filterUserResponse = (user) => {
     return {
         id: user.id,
         name: user.name,
@@ -18,7 +18,7 @@ const filterUserResponse = (user, profile) => {
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         image: user.image,
-        profile
+        profile:user.profile || user.team
     }
 }
 

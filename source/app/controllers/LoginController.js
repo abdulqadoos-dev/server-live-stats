@@ -1,14 +1,10 @@
 const UserService = require('./../services/UserService')
 const OptService = require('./../services/OptService')
-const ProfileService = require('./../services/ProfileService')
-const TeamService = require('./../services/TeamService')
-const SchoolService = require('./../services/SchoolService')
 const jwt = require("jsonwebtoken");
 const ExceptionResponse = require('./../responses/ExceptionResponse')
 const UnauthorizedResponse = require('./../responses/UnauthorizedResponse')
 const LoginResponse = require('./../responses/LoginResponse')
 const VerifyOtpResponse = require('./../responses/VerifyOtpResponse')
-const {ROLE_FAN_ID, ROLE_TEAM_ID} = require("../services/Constants");
 
 const register = async (req, res, next) => {
     try {
@@ -29,16 +25,7 @@ const login = async (req, res, next) => {
                     expiresIn: "2h",
                 }
             );
-            let profile = null
-            if(parseInt(user.roleId) === ROLE_FAN_ID){
-                /** Get profile*/
-                profile = await ProfileService.getByUserId(user.id)
-            }else if(parseInt(user.roleId) === ROLE_TEAM_ID){
-                /** Get team profile*/
-                profile = await TeamService.getByUserId(user.id)
-                profile.school = await SchoolService.getById(profile.schoolId)
-            }
-            return res.status(200).send(LoginResponse({ user, token, profile}))
+            return res.status(200).send(LoginResponse({ user, token}))
         }
         return res.status(401).send(UnauthorizedResponse('Invalid credentials'))
     } catch (err) {
