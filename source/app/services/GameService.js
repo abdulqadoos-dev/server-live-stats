@@ -32,6 +32,10 @@ const verifyScheduleTime = async ({dateTime = new Date(), team1Id, team2Id}) => 
     return gameTime.length === 0;
 }
 
+const verifyId = async (id) => {
+    return Boolean(await GameModal.findByPk(id))
+}
+
 module.exports = {
-    create, getAll, verifyScheduleTime
+    create, getAll, verifyScheduleTime, verifyId
 }

@@ -1,22 +1,33 @@
 const express = require('express');
 const routes = express.Router();
+/**
+ * Controller imports
+ */
 const UserController = require('./../app/controllers/UserController')
 const LoginController = require('./../app/controllers/LoginController')
 const SportController = require('./../app/controllers/SportController')
 const ProfileController = require('./../app/controllers/ProfileController')
 const TeamController = require('./../app/controllers/TeamController')
-const {runSignupValidation, signupValidator} = require('./../app/validators/SignupValidator')
-const {loginValidator, runLoginValidation} = require('./../app/validators/LoginValidator')
-const authMiddleware = require('./../app/middlewares/auth')
-const CreateProfileValidator = require('./../app/validators/CreateProfileValidator')
-const CreateTeamValidator = require('./../app/validators/CreateTeamValidator')
-const RunValidation = require('./../app/validators/RunValidation')
 const PlayerController = require('./../app/controllers/PlayerController')
 const GameController = require('./../app/controllers/GameController')
+const MatchController = require('./../app/controllers/MatchController')
+/**
+ * Middlewares imports
+ */
+const authMiddleware = require('./../app/middlewares/auth')
+const uploadUserImageMiddleware = require('./../app/middlewares/UploadUserImageMiddleware')
+/**
+ * Validations import
+ */
+const {runSignupValidation, signupValidator} = require('./../app/validators/SignupValidator')
+const {loginValidator, runLoginValidation} = require('./../app/validators/LoginValidator')
+const RunValidation = require('./../app/validators/RunValidation')
+const CreateProfileValidator = require('./../app/validators/CreateProfileValidator')
+const CreateTeamValidator = require('./../app/validators/CreateTeamValidator')
 const CreateGameValidator = require('./../app/validators/CreateGameValidator')
 const CreatePlayerValidator = require('./../app/validators/CreatePlayerValidator')
 const VerifyScheduleTimeValidator = require('./../app/validators/VerifyScheduleTimeValidator')
-const uploadUserImageMiddleware = require('./../app/middlewares/UploadUserImageMiddleware')
+const CreateMatchValidator = require('./../app/validators/CreateMatchValidator')
 
 routes.get('/', (req, res, next)=>{
     res.json('Welcome to Nodejs app')
@@ -65,5 +76,9 @@ routes.post('/game/create', authMiddleware, CreateGameValidator, RunValidation, 
 routes.get('/games/:teamId', authMiddleware, GameController.getAll)
 routes.post('/games/verify-schedule-time', authMiddleware, VerifyScheduleTimeValidator, RunValidation, GameController.verifyScheduleTime)
 /** Ends*/
+
+/** Match routes */
+routes.post('/match/create', authMiddleware, CreateMatchValidator, RunValidation, MatchController.createMatch)
+/** Ends */
 
 module.exports = routes
