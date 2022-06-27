@@ -3,6 +3,7 @@ const MatchService = require('./../services/MatchService')
 const CreateMatchResponse = require("../responses/CreateMatchResponse");
 const GameService = require('./../services/GameService')
 const RequestValidationResponse = require("../responses/RequestValidationResponse");
+const NotFoundResponse = require("../responses/NotFoundResponse");
 
 const createMatch = async (req, res, next) => {
     try{
@@ -17,6 +18,20 @@ const createMatch = async (req, res, next) => {
     }
 }
 
+const updateMatch = async (req, res, next) => {
+    try{
+        const {id} = req.params;
+        const {matchDuration, matchPlayers, matchDetails} = req.body;
+        if(!(await MatchService.verifyId(id)) || (!matchDuration && !matchPlayers && !matchDetails)){
+            return res.status(404).send(NotFoundResponse('Request resource does not exist.'))
+        }
+        const match = await MatchService.update({id, matchDuration, matchPlayers, matchDetails});
+        return res.send(CreateMatchResponse(match))
+    } catch (err) {
+        return res.status(500).send(ExceptionResponse(err.message))
+    }
+}
+
 module.exports = {
-    createMatch
+    createMatch, updateMatch
 }

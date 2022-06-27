@@ -79,6 +79,7 @@ routes.post('/games/verify-schedule-time', authMiddleware, VerifyScheduleTimeVal
 
 /** Match routes */
 routes.post('/match/create', authMiddleware, CreateMatchValidator, RunValidation, MatchController.createMatch)
+routes.post('/match/update/:id', authMiddleware, MatchController.updateMatch)
 /** Ends */
 
 module.exports = routes
