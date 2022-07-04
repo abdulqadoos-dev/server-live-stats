@@ -13,20 +13,20 @@ module.exports = [
         .not()
         .isEmpty()
         .withMessage("location is required"),
-    check('team1Id')
+    check('mainTeamId')
         .not()
         .isEmpty()
-        .withMessage("Team 1 Id is required"),
-    check('team2Id')
+        .withMessage("Team Id is required"),
+    check('opponentTeamId')
         .not()
         .isEmpty()
-        .withMessage("Team 2 Id is required"),
-    check('team1PlayGround')
+        .withMessage("Opponent Team Id is required"),
+    check('mainTeamPlayGround')
         .not()
         .isEmpty()
-        .withMessage("Team 1 Play Ground is required"),
-    check('team2PlayGround')
+        .withMessage("Main Team Play Ground is required"),
+    check('opponentTeamPlayGround')
         .not()
         .isEmpty()
-        .withMessage("Team 2 Play Ground is required")
+        .withMessage("Opponent Team Play Ground is required")
 ]

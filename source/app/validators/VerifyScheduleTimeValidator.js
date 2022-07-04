@@ -5,11 +5,11 @@ module.exports = [
         .not()
         .isEmpty()
         .withMessage("DateTime is required"),
-    check('team1Id')
+    check('mainTeamId')
         .not()
         .isEmpty()
-        .withMessage("Team1Id is required"),
-    check('team2Id')
+        .withMessage("Team Id is required"),
+    check('opponentTeamId')
         .not()
         .isEmpty()
         .withMessage("Opponent Team must be selected")
