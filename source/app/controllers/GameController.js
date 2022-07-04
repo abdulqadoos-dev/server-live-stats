@@ -10,61 +10,62 @@ const SportModal = modelInstance.sport;
 const TeamModal = modelInstance.team;
 const SuccessWithDataResponse = require('./../responses/SuccessWithDataResponse')
 
-const create = async (req, res, next) => {
-    try{
-        const {sportId, dateTime, location, team1Id, team2Id, team1PlayGround, team2PlayGround} = req.body;
-        if((await validateIds({sportId, team1Id, team2Id}, res)))
+const create = async(req, res, next) => {
+    try {
+        const { sportId, dateTime, location, mainTeamId, opponentTeamId, mainTeamPlayGround, opponentTeamPlayGround } = req.body;
+        if ((await validateIds({ sportId, mainTeamId, opponentTeamId }, res)))
             return '';
-        await GameService.create({sportId, dateTime, location, team1Id, team2Id, team1PlayGround, team2PlayGround})
+        await GameService.create({ sportId, dateTime, location, mainTeamId, opponentTeamId, mainTeamPlayGround, opponentTeamPlayGround })
         return res.send(SuccessResponse('Game created successfully'))
-    }catch (err) {
+    } catch (err) {
         return res.status(500).send(ExceptionResponse(err.message))
     }
 }
 
-const getAll = async (req, res, next) => {
-    try{
-        const {teamId} = req.params
+const getAll = async(req, res, next) => {
+    try {
+        const { teamId } = req.params
         const games = await GameService.getAll(teamId);
         let gameDetails = [];
         for (let game of games) {
-            game.team1 = await TeamService.getById(game.team1Id);
-            game.team2 = await TeamService.getById(game.team2Id);
+            game.mainTeam = await TeamService.getById(game.mainTeamId);
+            game.opponentTeam = await TeamService.getById(game.opponentTeamId);
             game.sport = await SportService.getById(game.sportId);
             gameDetails.push(game)
         }
         return res.send(GetAllGamesResponse(games))
-    }catch (err) {
+    } catch (err) {
         return res.status(500).send(ExceptionResponse(err.message))
     }
 }
 
-const verifyScheduleTime = async (req, res, next) => {
-    try{
-        const {dateTime, team1Id, team2Id} = req.body;
-        if(await GameService.verifyScheduleTime({dateTime, team1Id, team2Id})){
-            return res.send(SuccessWithDataResponse({isScheduled:true}))
+const verifyScheduleTime = async(req, res, next) => {
+    try {
+        const { dateTime, mainTeamId, opponentTeamId } = req.body;
+        if (await GameService.verifyScheduleTime({ dateTime, mainTeamId, opponentTeamId })) {
+            return res.send(SuccessWithDataResponse({ isScheduled: true }))
         }
-        return res.send(SuccessWithDataResponse({isScheduled:false}))
-
-    }catch (err) {
+        return res.send(SuccessWithDataResponse({ isScheduled: false }))
+    } catch (err) {
         return res.status(500).send(ExceptionResponse(err.message))
     }
 }
 
 module.exports = {
-    create, getAll, verifyScheduleTime
+    create,
+    getAll,
+    verifyScheduleTime
 }
 
-const validateIds = async ({sportId, team1Id, team2Id}, res) => {
+const validateIds = async({ sportId, mainTeamId, opponentTeamId }, res) => {
     if (!(await SportModal.findByPk(sportId))?.id) {
-        return res.status(400).send(RequestValidationResponse({sportId: 'Sport id is incorrect'}));
+        return res.status(400).send(RequestValidationResponse({ sportId: 'Sport id is incorrect' }));
     }
-    if (!(await TeamModal.findByPk(team1Id))?.id) {
-        return res.status(400).send(RequestValidationResponse({sportId: 'Team 1 id is incorrect'}));
+    if (!(await TeamModal.findByPk(mainTeamId))?.id) {
+        return res.status(400).send(RequestValidationResponse({ mainTeamId: 'Main Team id is incorrect' }));
     }
-    if (!(await TeamModal.findByPk(team2Id))?.id) {
-        return res.status(400).send(RequestValidationResponse({sportId: 'Team 2 id is incorrect'}));
+    if (!(await TeamModal.findByPk(opponentTeamId))?.id) {
+        return res.status(400).send(RequestValidationResponse({ opponentTeamId: 'Opponent Team id is incorrect' }));
     }
     return false;
 }

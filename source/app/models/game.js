@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     }
     Game.init({
         sportId: DataTypes.INTEGER,
-        team1Id: DataTypes.INTEGER,
-        team2Id: DataTypes.INTEGER,
+        mainTeamId: DataTypes.INTEGER,
+        opponentTeamId: DataTypes.INTEGER,
         location: DataTypes.JSON,
-        team1PlayGround: DataTypes.STRING,
-        team2PlayGround: DataTypes.STRING,
+        mainTeamPlayGround: DataTypes.STRING,
+        opponentTeamPlayGround: DataTypes.STRING,
         dateTime: DataTypes.DATE,
     }, {
         sequelize,
