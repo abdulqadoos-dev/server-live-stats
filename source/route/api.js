@@ -78,6 +78,9 @@ routes.post('/games/verify-schedule-time', authMiddleware, VerifyScheduleTimeVal
 /** Ends*/
 
 /** Match routes */
+routes.get('/matches',authMiddleware, MatchController.getMatches);
+routes.get('/matches/game/:gameId', authMiddleware, MatchController.getByGame);
+routes.get('/match/:id',authMiddleware, MatchController.getMatches);
 routes.post('/match/create', authMiddleware, CreateMatchValidator, RunValidation, MatchController.createMatch)
 routes.post('/match/update/:id', authMiddleware, MatchController.updateMatch)
 /** Ends */

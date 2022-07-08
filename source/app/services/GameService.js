@@ -48,9 +48,14 @@ const verifyId = async(id) => {
     return Boolean(await GameModal.findByPk(id))
 }
 
+const getByMainTeamId = async (mainTeamId) => {
+    return await GameModal.findAll({where:{mainTeamId}});
+}
+
 module.exports = {
     create,
     getAll,
     verifyScheduleTime,
-    verifyId
+    verifyId,
+    getByMainTeamId
 }
