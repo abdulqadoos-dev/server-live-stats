@@ -51,10 +51,21 @@ const verifyScheduleTime = async(req, res, next) => {
     }
 }
 
+const getBySportId = async (req, res, next) => {
+    try{
+        const {sportId} = req.params;
+        const games = await GameService.getBySport(sportId)
+        return res.send(GetAllGamesResponse(games))
+    }catch (err) {
+        return res.status(500).send(ExceptionResponse(err.message))
+    }
+}
+
 module.exports = {
     create,
     getAll,
-    verifyScheduleTime
+    verifyScheduleTime,
+    getBySportId
 }
 
 const validateIds = async({ sportId, mainTeamId, opponentTeamId }, res) => {

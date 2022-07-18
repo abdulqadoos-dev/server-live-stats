@@ -1,6 +1,8 @@
 const modelInstance = require('./../models/index')
 const { addHoursToDate } = require("./HelperService");
 const GameModal = modelInstance.game;
+const TeamModal = modelInstance.team;
+const SportModal = modelInstance.sport;
 const { Op } = require("sequelize");
 
 const create = async({ sportId, dateTime, location, mainTeamId, opponentTeamId, mainTeamPlayGround, opponentTeamPlayGround }) => {
@@ -52,10 +54,19 @@ const getByMainTeamId = async (mainTeamId) => {
     return await GameModal.findAll({where:{mainTeamId}});
 }
 
+const getBySport = async (sportId) => {
+    return await GameModal.findAll({where:{sportId}, include:[
+        {model: TeamModal, as: 'mainTeam', foreignKey: 'mainTeamId'},
+        {model: TeamModal, as: 'opponentTeam', foreignKey: 'opponentTeamId'},
+        {model: SportModal, as: 'sport', foreignKey: 'sportId'}
+    ]})
+}
+
 module.exports = {
     create,
     getAll,
     verifyScheduleTime,
     verifyId,
-    getByMainTeamId
+    getByMainTeamId,
+    getBySport
 }
