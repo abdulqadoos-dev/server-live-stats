@@ -3,6 +3,8 @@ const apiRoutes = require('./route/api');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
+const http = require("http");
+const socketsUtili = require('./app/sockets/InitSocket')
 
 app.use(cors())
 
@@ -42,6 +44,14 @@ app.use((req, res, next) => {
         message: error.message
     });
 });
-app.listen(process.env.PORT || 5000, ()=>{
+
+const server = http.createServer(app);
+
+/** Sockets Initialization */
+const io = socketsUtili.io(server);
+socketsUtili.connection(io)
+/** Sockets Ends */
+
+server.listen(process.env.PORT || 5000, ()=>{
     console.log(`App is listening to port ${process.env.PORT || 5000}`)
 })

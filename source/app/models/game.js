@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(models.team, {as: 'mainTeam', foreignKey: 'mainTeamId'})
             this.belongsTo(models.team, {as: 'opponentTeam', foreignKey: 'opponentTeamId'})
             this.belongsTo(models.sport, {as: 'sport', foreignKey: 'sportId'})
+            this.hasOne(models.match, {as: 'match', foreignKey:"gameId"})
         }
     }
     Game.init({
