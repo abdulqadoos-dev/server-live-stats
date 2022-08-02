@@ -27,7 +27,8 @@ const CreateTeamValidator = require('./../app/validators/CreateTeamValidator')
 const CreateGameValidator = require('./../app/validators/CreateGameValidator')
 const CreatePlayerValidator = require('./../app/validators/CreatePlayerValidator')
 const VerifyScheduleTimeValidator = require('./../app/validators/VerifyScheduleTimeValidator')
-const CreateMatchValidator = require('./../app/validators/CreateMatchValidator')
+const CreateMatchValidator = require('./../app/validators/CreateMatchValidator');
+const EndMatchValidator = require('../app/validators/EndMatchValidator');
 
 routes.get('/', (req, res, next)=>{
     res.json('Welcome to Nodejs app')
@@ -84,6 +85,7 @@ routes.get('/matches/game/:gameId', authMiddleware, MatchController.getByGame);
 routes.get('/match/:id',authMiddleware, MatchController.getMatches);
 routes.post('/match/create', authMiddleware, CreateMatchValidator, RunValidation, MatchController.createMatch)
 routes.post('/match/update/:id', authMiddleware, MatchController.updateMatch)
+routes.post('/match/end-match/:id', authMiddleware, EndMatchValidator, RunValidation, MatchController.endMatch)
 /** Ends */
 
 module.exports = routes

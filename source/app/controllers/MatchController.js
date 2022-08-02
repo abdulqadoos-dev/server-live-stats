@@ -5,6 +5,8 @@ const GameService = require("./../services/GameService");
 const RequestValidationResponse = require("../responses/RequestValidationResponse");
 const NotFoundResponse = require("../responses/NotFoundResponse");
 const SuccessWithDataResponse = require("../responses/SuccessWithDataResponse");
+const SuccessResponse = require("../responses/SuccessResponse");
+const MailService = require('./../services/MailService')
 
 const createMatch = async (req, res, next) => {
 	try {
@@ -58,9 +60,25 @@ const getByGame = async (req, res, next) => {
 	}
 }
 
+const endMatch = async (req, res, next) => {
+	try{
+		const {id} = req.params
+		const match = await MatchService.getById(id);
+		if(!match) {
+			return res.status(404).send(NotFoundResponse("Request resource does not exist."))
+		}
+		const {homeEmail, awayEmail} = req.body;
+		MailService.endMatchEmail(50, 45, [homeEmail, awayEmail])
+		return res.send(SuccessResponse('Email sent successfully'))
+	}catch (err) {
+		return res.status(500).send(ExceptionResponse(err.message));
+	}
+}
+
 module.exports = {
 	createMatch,
 	updateMatch,
 	getMatches,
-    getByGame
+    getByGame,
+	endMatch,
 };

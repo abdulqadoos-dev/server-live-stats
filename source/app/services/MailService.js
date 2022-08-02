@@ -1,6 +1,12 @@
 const axios = require('axios')
 const {EMAILJS_SEND_EMAIL_API_URL} = require("./Constants");
 
+const configs = {
+    service_id: process.env.EMAILJS_SERVICE_ID,
+    user_id: process.env.EMAILJS_PUBLIC_KEY,
+    accessToken: process.env.EMAILJS_PRIVATE_KEY
+}
+
 const send = (to, subject, body, otp, from = null) => {
     const templateParams = {
         send_to_email: to,
@@ -18,4 +24,19 @@ const send = (to, subject, body, otp, from = null) => {
         .catch(err => console.log('email failed with error: ', err))
 }
 
-module.exports = {send}
+const endMatchEmail = (mainTeamScore, opponentTeamScore, receiversEmail=[]) => {
+    receiversEmail.forEach(email => {
+        const templateParams = {
+            send_to_email: email,
+            to_name: email.split('@')[0],
+            main_team_score:mainTeamScore,
+            opponent_team_score:opponentTeamScore
+        }
+        const requestData = {...configs, template_params: templateParams, template_id:process.env.EMAILJS_TEMPLATE_ID_END_MATCH}
+        axios.post(EMAILJS_SEND_EMAIL_API_URL, requestData)
+            .then(res => console.log('email sent'))
+            .catch(err => console.log('email failed with error: ', err))
+    })
+}
+
+module.exports = {send, endMatchEmail}
