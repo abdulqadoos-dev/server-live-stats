@@ -24,13 +24,15 @@ const send = (to, subject, body, otp, from = null) => {
         .catch(err => console.log('email failed with error: ', err))
 }
 
-const endMatchEmail = (mainTeamScore, opponentTeamScore, receiversEmail=[]) => {
+const endMatchEmail = (mainTeamDetails, opponentTeamDetails, receiversEmail=[]) => {
     receiversEmail.forEach(email => {
         const templateParams = {
             send_to_email: email,
             to_name: email.split('@')[0],
-            main_team_score:mainTeamScore,
-            opponent_team_score:opponentTeamScore
+            main_team_name:mainTeamDetails.name,
+            main_team_score:mainTeamDetails.score,
+            opponent_team_name:opponentTeamDetails.name,
+            opponent_team_score:opponentTeamDetails.score
         }
         const requestData = {...configs, template_params: templateParams, template_id:process.env.EMAILJS_TEMPLATE_ID_END_MATCH}
         axios.post(EMAILJS_SEND_EMAIL_API_URL, requestData)

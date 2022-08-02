@@ -68,7 +68,7 @@ const endMatch = async (req, res, next) => {
 			return res.status(404).send(NotFoundResponse("Request resource does not exist."))
 		}
 		const {homeEmail, awayEmail} = req.body;
-		MailService.endMatchEmail(50, 45, [homeEmail, awayEmail])
+		MatchService.endMatchEmail(match, [homeEmail, awayEmail])
 		return res.send(SuccessResponse('Email sent successfully'))
 	}catch (err) {
 		return res.status(500).send(ExceptionResponse(err.message));
