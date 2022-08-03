@@ -69,6 +69,9 @@ const endMatch = async (req, res, next) => {
 		}
 		const {homeEmail, awayEmail} = req.body;
 		MatchService.endMatchEmail(match, [homeEmail, awayEmail])
+		let { matchDuration, matchPlayers, matchDetails } = match;
+		matchDetails = {...matchDetails, homeEmail, awayEmail}
+		await MatchService.update({ id, matchDuration, matchPlayers, matchDetails });
 		return res.send(SuccessResponse('Email sent successfully'))
 	}catch (err) {
 		return res.status(500).send(ExceptionResponse(err.message));
