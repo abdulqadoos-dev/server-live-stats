@@ -1,12 +1,13 @@
 const GameService = require("./../services/GameService")
+const MatchService = require("./../services/MatchService")
 
 const getGameSocket = (socket) => {
 	let interval;
 	socket.on("request_game_data", async (data) => {
 		const { gameId } = data;
 		interval = setInterval(async () =>{
-			const game = await GameService.find(gameId);
-			emitGameData(socket, game);
+			const match = await MatchService.getByGameId(gameId);
+			emitGameData(socket, match);
 		}, 3000)
 	});
 
@@ -16,8 +17,8 @@ const getGameSocket = (socket) => {
 	});
 };
 
-const emitGameData = (socket, game) => {
-	socket.emit("get_game_data", { game, socketId: socket.id, time: new Date().getTime() });
+const emitGameData = (socket, match) => {
+	socket.emit("get_game_data", { match, socketId: socket.id, time: new Date().getTime() });
 };
 
 module.exports = {
