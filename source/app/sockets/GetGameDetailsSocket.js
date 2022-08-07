@@ -8,7 +8,7 @@ const getGameSocket = (socket) => {
 		interval = setInterval(async () =>{
 			const match = await MatchService.getByGameId(gameId);
 			emitGameData(socket, match);
-		}, 3000)
+		}, 1000)
 	});
 
 	socket.on("disconnect", () => {
