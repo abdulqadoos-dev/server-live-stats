@@ -29,6 +29,7 @@ const updateMatch = async (req, res, next) => {
 			return res.status(404).send(NotFoundResponse("Request resource does not exist."));
 		}
 		const match = await MatchService.update({ id, matchDuration, matchPlayers, matchDetails });
+		IOGlobal.emit("broadcast_game_match_"+match.id, { match, time: new Date().getTime() });
 		return res.send(CreateMatchResponse(match));
 	} catch (err) {
 		return res.status(500).send(ExceptionResponse(err.message));
