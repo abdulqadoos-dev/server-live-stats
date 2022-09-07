@@ -61,13 +61,6 @@ const getBySportId = async (req, res, next) => {
     }
 }
 
-module.exports = {
-    create,
-    getAll,
-    verifyScheduleTime,
-    getBySportId
-}
-
 const validateIds = async({ sportId, mainTeamId, opponentTeamId }, res) => {
     if (!(await SportModal.findByPk(sportId))?.id) {
         return res.status(400).send(RequestValidationResponse({ sportId: 'Sport id is incorrect' }));
@@ -79,4 +72,42 @@ const validateIds = async({ sportId, mainTeamId, opponentTeamId }, res) => {
         return res.status(400).send(RequestValidationResponse({ opponentTeamId: 'Opponent Team id is incorrect' }));
     }
     return false;
+}
+
+const update = async (req, res, next) => {
+    try{
+        const {id} = req.params;
+        if(!(await GameService.find(id))){
+            return res.status(400).send(RequestValidationResponse({ gameId: 'Game id is incorrect' }));
+        }
+        const {location, mainTeamPlayGround, opponentTeamPlayGround, dateTime, details} = req.body;
+        const game = await GameService.update(id, {location, mainTeamPlayGround, opponentTeamPlayGround, dateTime, details})
+        return res.send(SuccessWithDataResponse({game, message:'Game updated successfully'}));
+    }catch (err) {
+        return res.status(500).send(ExceptionResponse(err.message))
+    }
+}
+
+const updateGameDetails = async (req, res) => {
+    try{
+        const {id} = req.params;
+        if(!(await GameService.find(id))){
+            return res.status(400).send(RequestValidationResponse({ gameId: 'Game id is incorrect' }));
+        }
+        const {details} = req.body;
+        const game = await GameService.update(id, {details})
+        IOGlobal.emit("broadcast_game_"+game.id, { game, time: new Date().getTime() });
+        return res.send(SuccessWithDataResponse({game, message:'Game details updated successfully'}));
+    }catch (err) {
+        return res.status(500).send(ExceptionResponse(err.message))
+    }
+}
+
+module.exports = {
+    create,
+    getAll,
+    verifyScheduleTime,
+    getBySportId,
+    update,
+    updateGameDetails
 }

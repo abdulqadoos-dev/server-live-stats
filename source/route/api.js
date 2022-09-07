@@ -73,6 +73,8 @@ routes.post('/players', authMiddleware, CreatePlayerValidator, RunValidation, Pl
 
 /** Game routes*/
 routes.post('/game/create', authMiddleware, CreateGameValidator, RunValidation, GameController.create)
+routes.put('/game/update/:id', authMiddleware, GameController.update);
+routes.put('/game/update/:id/details', authMiddleware, GameController.updateGameDetails);
 // routes.get('/games', authMiddleware, GameController.getAll)
 routes.get('/games/:teamId', authMiddleware, GameController.getAll)
 routes.post('/games/verify-schedule-time', authMiddleware, VerifyScheduleTimeValidator, RunValidation, GameController.verifyScheduleTime)

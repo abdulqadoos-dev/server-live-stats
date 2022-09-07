@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         mainTeamPlayGround: DataTypes.STRING,
         opponentTeamPlayGround: DataTypes.STRING,
         dateTime: DataTypes.DATE,
+        details: DataTypes.JSON,
     }, {
         sequelize,
         modelName: 'game',

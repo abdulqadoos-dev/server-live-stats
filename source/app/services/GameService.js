@@ -75,6 +75,11 @@ const find = async (id) => {
     });
 }
 
+const update = async (id, requestBody) => {
+    await GameModal.update(requestBody, {where:{id}})
+    return await GameModal.findByPk(id)
+}
+
 module.exports = {
     create,
     getAll,
@@ -82,5 +87,6 @@ module.exports = {
     verifyId,
     getByMainTeamId,
     getBySport,
-    find
+    find,
+    update
 }
