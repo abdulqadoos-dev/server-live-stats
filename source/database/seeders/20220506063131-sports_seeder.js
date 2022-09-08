@@ -23,7 +23,14 @@ module.exports = {
         matchHalfTime: 45,
         noPlayerRequired: 11,
         minNoPlayers: 7,
-        maxNoPlayers: 11
+        maxNoPlayers: 11,
+        halfDetails: [
+          {label: 1, value: '1st', time: 10},
+          {label: 2, value: '2nd', time: 10},
+          {label: "H", value: 'H', time: 10},
+          {label: 3, value: '3rd', time: 10},
+          {label: 4, value: '4th', time: 10}
+        ]
       }
     ];
     for (const sport of data) {

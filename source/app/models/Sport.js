@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         noPlayerRequired: DataTypes.INTEGER,
         minNoPlayers: DataTypes.INTEGER,
         maxNoPlayers: DataTypes.INTEGER,
+        halfDetails: DataTypes.JSON,
     }, {
         sequelize,
         modelName: 'sport',
