@@ -8,15 +8,20 @@ const modelInstance = require("../models");
 const GetAllGamesResponse = require("../responses/GetAllGamesResponse");
 const SportModal = modelInstance.sport;
 const TeamModal = modelInstance.team;
-const SuccessWithDataResponse = require('./../responses/SuccessWithDataResponse')
+const SuccessWithDataResponse = require('./../responses/SuccessWithDataResponse');
+const BadRequestResponse = require("../responses/BadRequestResponse");
 
 const create = async(req, res, next) => {
     try {
         const { sportId, dateTime, location, mainTeamId, opponentTeamId, mainTeamPlayGround, opponentTeamPlayGround } = req.body;
         if ((await validateIds({ sportId, mainTeamId, opponentTeamId }, res)))
             return '';
-        await GameService.create({ sportId, dateTime, location, mainTeamId, opponentTeamId, mainTeamPlayGround, opponentTeamPlayGround })
-        return res.send(SuccessResponse('Game created successfully'))
+        if (await GameService.verifyScheduleTime({ dateTime, mainTeamId, opponentTeamId })) {
+            await GameService.create({ sportId, dateTime, location, mainTeamId, opponentTeamId, mainTeamPlayGround, opponentTeamPlayGround })
+            return res.send(SuccessResponse('Game created successfully'))
+        }else{
+            return res.status(400).send(BadRequestResponse('Another game is scheduled at selected time!'));
+        }
     } catch (err) {
         return res.status(500).send(ExceptionResponse(err.message))
     }
