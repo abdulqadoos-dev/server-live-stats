@@ -124,6 +124,24 @@ const getById = async (req, res, next) => {
 	}
 }
 
+const endGame = async (req, res, next) => {
+	try{
+		const {id} = req.params
+		const game = await GameService.find(id);
+		if(!game) {
+			return res.status(404).send(NotFoundResponse("Request resource does not exist."))
+		}
+		const {homeEmail, awayEmail} = req.body;
+		GameService.endGameEmail(game, [homeEmail, awayEmail])
+		let { matchDuration, matchPlayers, matchDetails } = game.details;
+		matchDetails = {...matchDetails, homeEmail, awayEmail}
+		await GameService.update(id, {details:{matchDuration, matchPlayers, matchDetails} });
+		return res.send(SuccessResponse('Email sent successfully'))
+	}catch (err) {
+		return res.status(500).send(ExceptionResponse(err.message));
+	}
+}
+
 module.exports = {
 	create,
 	getAll,
@@ -132,4 +150,5 @@ module.exports = {
 	update,
 	updateGameDetails,
 	getById,
+	endGame,
 };

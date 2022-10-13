@@ -6,6 +6,7 @@ const SportModal = modelInstance.sport;
 const MatchModel = modelInstance.match;
 const UserModel = modelInstance.user;
 const { Op } = require("sequelize");
+const MailService = require('./MailService')
 
 const create = async ({ sportId, dateTime, location, mainTeamId, opponentTeamId, mainTeamPlayGround, opponentTeamPlayGround }) => {
 	return await GameModal.create({ sportId, dateTime, location, mainTeamId, opponentTeamId, mainTeamPlayGround, opponentTeamPlayGround });
@@ -115,6 +116,17 @@ const update = async (id, requestBody) => {
 	return await find(id);
 };
 
+const endGameEmail = (game, receiversEmail) => {
+    const mainTeamDetails = {
+        name:game.mainTeam.name,
+        score: game.details.matchPlayers.mainTeamTotal || 10
+    }
+    const opponentTeamDetails = {
+        name:game.opponentTeam.name,
+        score: game.details.matchPlayers.opponentTeamTotal || 20
+    }
+    MailService.endMatchEmail(mainTeamDetails, opponentTeamDetails, receiversEmail)
+}
 module.exports = {
 	create,
 	getAll,
@@ -124,4 +136,5 @@ module.exports = {
 	getBySport,
 	find,
 	update,
+	endGameEmail
 };
