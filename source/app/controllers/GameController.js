@@ -104,12 +104,25 @@ const updateGameDetails = async (req, res) => {
 		}
 		const { details } = req.body;
 		const game = await GameService.update(id, { details });
-		IOGlobal.emit("broadcast_game_" + game.id, { game, time: new Date().getTime() });
+		try{
+			IOGlobal.emit("broadcast_game_" + game.id, { game, time: new Date().getTime() });
+		}catch (err) {}
 		return res.send(SuccessWithDataResponse({ game, message: "Game details updated successfully" }));
 	} catch (err) {
 		return res.status(500).send(ExceptionResponse(err.message));
 	}
 };
+
+const getById = async (req, res, next) => {
+	try{
+		const { id } = req.params;
+		const game = await GameService.find(id);
+		return res.send(SuccessWithDataResponse({ game}));
+
+	}catch (err){
+		return res.status(500).send(ExceptionResponse(err.message));
+	}
+}
 
 module.exports = {
 	create,
@@ -118,4 +131,5 @@ module.exports = {
 	getBySportId,
 	update,
 	updateGameDetails,
+	getById,
 };

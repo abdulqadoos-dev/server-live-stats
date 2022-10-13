@@ -79,6 +79,7 @@ routes.put('/game/update/:id/details', authMiddleware, GameController.updateGame
 routes.get('/games/:teamId', authMiddleware, GameController.getAll)
 routes.post('/games/verify-schedule-time', authMiddleware, VerifyScheduleTimeValidator, RunValidation, GameController.verifyScheduleTime)
 routes.get('/games/sport/:sportId', authMiddleware, GameController.getBySportId);
+routes.get('/game/:id', authMiddleware, GameController.getById)
 /** Ends*/
 
 /** Match routes */
