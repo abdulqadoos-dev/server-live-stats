@@ -105,7 +105,7 @@ const updateGameDetails = async (req, res) => {
 		const { details } = req.body;
 		const game = await GameService.update(id, { details });
 		try{
-			IOGlobal.emit("broadcast_game_" + game.id, { game, time: new Date().getTime() });
+			details && details != {} && IOGlobal.emit("broadcast_game_" + game.id, { game, time: new Date().getTime() });
 		}catch (err) {}
 		return res.send(SuccessWithDataResponse({ game, message: "Game details updated successfully" }));
 	} catch (err) {
